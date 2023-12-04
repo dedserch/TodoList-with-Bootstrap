@@ -10,10 +10,15 @@ const task = [
 ]
 
 const submit = document.querySelector(".addSubmit")
-const addAgree = document.querySelector(".addAgree")
-const addNoAgree = document.querySelector(".addNoAgree")
+const checkbox = document.querySelector(".addCheckBox")
 const addInput = document.querySelector(".addInput")
+const modal = document.querySelector("#exampleModal")
 
 submit.addEventListener("click", () => {
-    console.log("123");
+    
+    console.log(addInput.value)
+    console.log(checkbox.checked);
+    if (addInput.value && checkbox.checked == 0){
+        
+    }
 })
