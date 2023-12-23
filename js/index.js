@@ -25,7 +25,7 @@ const fillTaskList = () => {
         <td>${item.taskName}</td>
         <td>${item.isDone ? 'Done': 'IsProgress'}</td>
         <td>
-            <button type="button" class="btn ${item.isDone? 'btn-primary':'btn-outline-primary'}">Done</button>
+            <button data-id=${item.id} type="button" class="btn taskDoneStatus ${item.isDone? 'btn-primary':'btn-outline-primary'}">Done</button>
         </td>
         <td>
             <button data-id=${item.id} type="button" class="btn taskImportantBtn ${item.isImportant? 'btn-warning': 'btn-outline-warning'}">Important</button>
@@ -36,8 +36,9 @@ const fillTaskList = () => {
 
       
     } )
-
+    const allDoneStatus = document.querySelectorAll('.taskDoneStatus')
     const allImportantBtn = document.querySelectorAll('.taskImportantBtn')
+    
 
     Array.from(allImportantBtn).forEach((item) => {
         item.addEventListener('click', () =>{
@@ -50,7 +51,22 @@ const fillTaskList = () => {
             fillTaskList()
         })
     })
+
+    Array.from(allDoneStatus).forEach((item) =>{     
+        item.addEventListener('click', () => {
+            task = task.map((el) =>{
+                if (el.id == item.dataset.id){
+                    return {...el, isDone: !el.isDone}
+                }
+                else {
+                    return el
+                }
+            })
+            fillTaskList()
+        })
+    })
 }
+    
 
 addInput.addEventListener("change", () => {
     if (addInput.value.length >= 3){
@@ -74,13 +90,13 @@ submit.addEventListener("click", () => {
             isDone: false
         }
         task = [...task, newTask]
-        modalError.style.display = "none"
+        modalError.style.display = 'none'
         addInput.value = ''
         checkbox.checked = false
         fillTaskList()
     }
     else {
-        modalError.style.display = "block"
+        modalError.style.display = 'block'
     }
     
     
