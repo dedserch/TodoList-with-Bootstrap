@@ -16,6 +16,7 @@ const modal = document.querySelector("#exampleModal")
 const modalError = document.querySelector(".modalError")
 
 const taskList = document.querySelector(".taskList")
+const error = ""
 
 const fillTaskList = () => {
     taskList.innerHTML = ''
@@ -66,7 +67,7 @@ const fillTaskList = () => {
         })
     })
 }
-    
+ console.log(modal);   
 
 addInput.addEventListener("change", () => {
     if (addInput.value.length >= 3){
@@ -82,25 +83,37 @@ addInput.addEventListener("change", () => {
 submit.addEventListener("click", () => {
     
 
-    if (addInput.value.length >= 3){
-         const newTask = {
-            id: task.length ? task.at(-1).id + 1 : 1,
-            taskName: addInput.value,
-            isImportant: checkbox.checked,
-            isDone: false
+    if (addInput.value.length >= 3 ){
+        if (isUnique(addInput.value)){
+            const newTask = {
+                id: task.length ? task.at(-1).id + 1 : 1,
+                taskName: addInput.value,
+                isImportant: checkbox.checked,
+                isDone: false
+            }
+            task = [...task, newTask]
+            modalError.style.display = 'none'
+            addInput.value = ''
+            checkbox.checked = false
+            fillTaskList()
         }
-        task = [...task, newTask]
-        modalError.style.display = 'none'
-        addInput.value = ''
-        checkbox.checked = false
-        fillTaskList()
+        else {
+            modalError.style.display = 'block'
+            modalError.innerHTML = 'Заметка должна быть уникальной'
+        }
+         
     }
     else {
         modalError.style.display = 'block'
+        modalError.innerHTML = 'Минимальное кол-во символов должно быть 3'
     }
     
     
 })
+
+const isUnique = (taskName) =>{
+    return !task.find(todo=>todo.taskName==taskName)
+}
 
 
 
