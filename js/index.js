@@ -14,6 +14,7 @@ const checkbox = document.querySelector(".addCheckBox")
 const addInput = document.querySelector(".addInput")
 const modal = document.querySelector("#exampleModal")
 const modalError = document.querySelector(".modalError")
+const modalEdit = document.querySelector("#staticBackdrop")
 
 const taskList = document.querySelector(".taskList")
 const error = ""
@@ -31,14 +32,39 @@ const fillTaskList = () => {
         <td>
             <button data-id=${item.id} type="button" class="btn taskImportantBtn ${item.isImportant? 'btn-warning': 'btn-outline-warning'}">Important</button>
         </td>
-        <td>Edit</td>
-        <td>Remove</td>
+        <td>
+            <button data-name=${item.taskName} data-id=${item.id} type="button" class="btn editBtn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</button>
+        </td>
+        <td>
+            <button data-id=${item.id} type="button" class="btn taskRemoveBtn btn-danger">Remove</button>
+        </td>
       </tr>`
 
       
     } )
     const allDoneStatus = document.querySelectorAll('.taskDoneStatus')
     const allImportantBtn = document.querySelectorAll('.taskImportantBtn')
+    const removeBtn = document.querySelectorAll('.taskRemoveBtn')
+    const editSaveBtn = document.querySelector('.editSave')
+    const editInput = document.querySelector('.editInput')
+    const editBtn = document.querySelector('.editBtn')
+    
+
+    Array.from(editBtn).forEach((item) =>{
+        item.addEventListener('click', () =>{
+            editInput.value = item.dataset.name
+        })
+    })
+    
+
+    Array.from(removeBtn).forEach((item) => {
+        item.addEventListener('click', () =>{
+            task = task.filter((el) =>{
+                return el.id != item.dataset.id
+            })
+            fillTaskList()
+        })
+    })
     
 
     Array.from(allImportantBtn).forEach((item) => {
@@ -67,7 +93,7 @@ const fillTaskList = () => {
         })
     })
 }
- console.log(modal);   
+ 
 
 addInput.addEventListener("change", () => {
     if (addInput.value.length >= 3){
