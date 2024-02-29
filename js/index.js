@@ -3,7 +3,7 @@
 let task = [
     {
         id:1,
-        taskName: "Пойти гулять",
+        taskName: "Помогите",
         isImportant:false,
         isDone:false
     }
@@ -15,7 +15,7 @@ const addInput = document.querySelector(".addInput")
 const modal = document.querySelector("#exampleModal")
 const modalError = document.querySelector(".modalError")
 const modalEdit = document.querySelector("#staticBackdrop")
-
+const editError = document.querySelector(".editError")
 const taskList = document.querySelector(".taskList")
 const error = ""
 
@@ -33,10 +33,10 @@ const fillTaskList = () => {
             <button data-id=${item.id} type="button" class="btn taskImportantBtn ${item.isImportant? 'btn-warning': 'btn-outline-warning'}">Important</button>
         </td>
         <td>
-            <button data-name=${item.taskName} data-id=${item.id} type="button" class="btn editBtn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</button>
+            <button data-name=${item.taskName} data-id=${item.id} type="button" class="btn editBtn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</button>
         </td>
         <td>
-            <button data-id=${item.id} type="button" class="btn taskRemoveBtn btn-danger">Remove</button>
+            <button data-id=${item.id} type="button" class="btn taskRemoveBtn btn-outline-danger">Remove</button>
         </td>
       </tr>`
 
@@ -47,15 +47,40 @@ const fillTaskList = () => {
     const removeBtn = document.querySelectorAll('.taskRemoveBtn')
     const editSaveBtn = document.querySelector('.editSave')
     const editInput = document.querySelector('.editInput')
-    const editBtn = document.querySelector('.editBtn')
+    const editBtn = document.querySelectorAll('.editBtn')
     
-
-    Array.from(editBtn).forEach((item) =>{
-        item.addEventListener('click', () =>{
+    Array.from(editBtn).forEach(item =>{
+        item.addEventListener("click", () =>{
             editInput.value = item.dataset.name
+            editSaveBtn.dataset.id = item.dataset.id
         })
     })
     
+    editSaveBtn.addEventListener("click", () =>{
+        if(editInput.value.length >= 3){
+            if(isUnique(editInput.value)){
+                task = task.map(item =>{
+                    if(item.id == editSaveBtn.dataset.id){
+                        return {...item,taskName: editInput.value}
+                    }
+                    else{ 
+                        return item
+                    }
+                })
+            }
+            else {
+                editError.style.display = 'block'
+                editError.innerText = "Измененное слово должно быть уникальным!"
+            }
+        }
+        else{
+            editError.style.display = 'block'
+            editError.innerText = "Измененное слово должно состоять минимум из 3 символов!"
+        }
+
+        fillTaskList()
+    })
+
 
     Array.from(removeBtn).forEach((item) => {
         item.addEventListener('click', () =>{
